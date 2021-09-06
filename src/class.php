@@ -1,5 +1,5 @@
 <?php
-Class yurtici {
+Class yurticiKargo {
 
     protected static $url, $parameters;
 
