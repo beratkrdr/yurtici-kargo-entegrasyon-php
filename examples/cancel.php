@@ -8,5 +8,4 @@ $response = $yurtici->cancelShipment('123456');
 echo "<pre>";
 print_r($response);
 echo "</pre>";
-
 ?>
