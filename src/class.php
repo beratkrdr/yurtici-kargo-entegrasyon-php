@@ -1,58 +1,85 @@
 <?php
 Class yurticiKargo {
 
-    protected static $url, $parameters;
+    protected static $url, $oAuth, $cleanResult;
 
     public function __construct(array $attributes = array()) {
 
         if (isset($attributes['testMode']) && $attributes['testMode']==true){
             self::$url = 'http://testwebservices.yurticikargo.com:9090/KOPSWebServices/ShippingOrderDispatcherServices?wsdl';
 
-            self::$parameters = [
-                'wsUserName'   => "YKTEST",
-                'wsPassword'   => "YK"
-            ];
+            self::$oAuth = '<wsUserName>YKTEST</wsUserName>
+                            <wsPassword>YK</wsPassword>
+                            <userLanguage>TR</userLanguage>';
         }else{
-
-            global $yk_username, $yk_password;
-
             self::$url = 'http://webservices.yurticikargo.com:8080/KOPSWebServices/ShippingOrderDispatcherServices?wsdl';
 
-            self::$parameters = [
-                'wsUserName'   => $yk_username,
-                'wsPassword'   => $yk_password
-            ];
+            self::$oAuth = '<wsUserName>'.$attributes['wsUserName'].'</wsUserName>
+                            <wsPassword>'.$attributes['wsPassword'].'</wsPassword>
+                            <userLanguage>'.$attributes['wsLanguage'].'</userLanguage>';
         }
 
-        self::$parameters['wsLanguage'] = "TR";
+        if (isset($attributes['cleanResult'])){
+            self::$cleanResult = $attributes['cleanResult'];
+        }else{
+            self::$cleanResult = true;
+        }
+
     }
 
+
+    /* BEGIN::Functions */
     public function createShipment(array $data = array()) {
+
+        $accepted_parameters = array(
+            'cargoKey',
+            'invoiceKey',
+            'receiverCustName',
+            'receiverAddress',
+            'receiverPhone1',
+            'receiverPhone2',
+            'receiverPhone3',
+            'cityName',
+            'townName',
+            'custProdId',
+            'desi',
+            'desiSpecified',
+            'kg',
+            'cargoCount',
+            'waybillNo',
+            'taxOfficeId',
+            'ttDocumentId',
+            'dcSelectedCredit',
+            'dcCreditRule',
+            'emailAddress',
+            'orgReceiverCustId'
+        );
 
         $xml = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ship="http://yurticikargo.com.tr/ShippingOrderDispatcherServices">
                 <soapenv:Header/>
                 <soapenv:Body>
                 <ship:createShipment>
-                            <wsUserName>'.self::$parameters['wsUserName'].'</wsUserName>
-                            <wsPassword>'.self::$parameters['wsPassword'].'</wsPassword>
-                            <userLanguage>'.self::$parameters['wsLanguage'].'</userLanguage>
-                            <ShippingOrderVO>
-                                <cargoKey>'.$data['cargoKey'].'</cargoKey>
-                                <invoiceKey>'.$data['invoiceKey'].'</invoiceKey>
-                                <receiverCustName>'.$data['receiverCustName'].'</receiverCustName>
-                                <receiverAddress>'.$data['receiverAddress'].'</receiverAddress>
-                                <cityName>'.$data['cityName'].'</cityName>
-                                <townName>'.$data['townName'].'</townName>
-                                <receiverPhone1>'.$data['receiverPhone1'].'</receiverPhone1>
-                                <emailAddress>'.$data['emailAddress'].'</emailAddress>
-                                <orgReceiverCustId>'.$data['orgReceiverCustId'].'</orgReceiverCustId>
-                            </ShippingOrderVO>
+                    '.self::$oAuth.'
+                    <ShippingOrderVO>';
+
+        foreach ($data as $param => $value) {
+            if (in_array($param, $accepted_parameters)){
+                $xml .= '<'.$param.'>'.$value.'</'.$param.'>';
+            }
+        }
+
+        $xml .= '   </ShippingOrderVO>
                 </ship:createShipment>
                 </soapenv:Body>
                 </soapenv:Envelope>';
 
+        if (self::$cleanResult){
+            $result = $this->sendCurl(self::$url, $xml)['ns1_createShipmentResponse']['ShippingOrderResultVO'];
+        }else{
+            $result = $this->sendCurl(self::$url, $xml);
+        }
 
-        return $this->sendCurl(self::$url, $xml)['ns1:createShipmentResponse']['ShippingOrderResultVO'];
+        return $result;
     }
 
     public function queryShipment($keys,$keyType,$addHistoricalData=true,$onlyTracking=true) {
@@ -61,9 +88,7 @@ Class yurticiKargo {
            <soapenv:Header/>
            <soapenv:Body>
               <ship:queryShipment>
-                 <wsUserName>'.self::$parameters['wsUserName'].'</wsUserName>
-                 <wsPassword>'.self::$parameters['wsPassword'].'</wsPassword>
-                 <wsLanguage>'.self::$parameters['wsLanguage'].'</wsLanguage>
+                 '.str_replace("userLanguage","wsLanguage", self::$oAuth).'
                  <keys>'.$keys.'</keys>
                  <keyType>'.$keyType.'</keyType>
                  <addHistoricalData>'.$addHistoricalData.'</addHistoricalData>
@@ -72,8 +97,13 @@ Class yurticiKargo {
            </soapenv:Body>
         </soapenv:Envelope>';
 
-        return $this->sendCurl(self::$url, $xml)['ns1:queryShipmentResponse']['ShippingDeliveryVO'];
+        if (self::$cleanResult){
+            $result = $this->sendCurl(self::$url, $xml)['ns1_queryShipmentResponse']['ShippingDeliveryVO'];
+        }else{
+            $result = $this->sendCurl(self::$url, $xml);
+        }
 
+        return $result;
     }
 
     public function cancelShipment($cargoKeys) {
@@ -82,18 +112,25 @@ Class yurticiKargo {
            <soapenv:Header/>
            <soapenv:Body>
               <ship:cancelShipment>
-                 <wsUserName>'.self::$parameters['wsUserName'].'</wsUserName>
-                 <wsPassword>'.self::$parameters['wsPassword'].'</wsPassword>
-                 <userLanguage>'.self::$parameters['wsLanguage'].'</userLanguage>
+                 '.self::$oAuth.'
                  <cargoKeys>'.$cargoKeys.'</cargoKeys>
               </ship:cancelShipment >
            </soapenv:Body>
         </soapenv:Envelope>';
 
-        return $this->sendCurl(self::$url, $xml)['ns1:cancelShipmentResponse']['ShippingOrderResultVO'];
-    }
+        if (self::$cleanResult){
+            $result = $this->sendCurl(self::$url, $xml)['ns1_cancelShipmentResponse']['ShippingOrderResultVO'];
+        }else{
+            $result = $this->sendCurl(self::$url, $xml);
+        }
 
-    public function sendCurl($url, $post_fields = ""){
+        return $result;
+    }
+    /* END::Functions */
+
+
+    /* BEGIN::Tools */
+    private function sendCurl($url, $post_fields = ""){
 
         $curl_request = curl_init();
 
@@ -117,75 +154,57 @@ Class yurticiKargo {
         }
 
         curl_close($curl_request);
-        $oXmlParser = new xmlParser();
-        $asArray = $oXmlParser->xmlParser($result);
 
-        return $asArray['env:Envelope']['env:Body'];
+        return $this->xmlParser($result);
 
     }
 
-    public function xmlParser($contents, $get_attributes=1, $priority = 'tag')
-    {
-        if(!$contents)
-            return array();
+    private function xmlParser($xml){
 
-        if(!function_exists('xml_parser_create'))
+        $obj = SimpleXML_Load_String(trim($xml));
+        if ($obj === FALSE) return $xml;
+
+        // Get Namespaces
+        $nss = $obj->getNamespaces(TRUE);
+        if (empty($nss)) return $xml;
+
+        // Replace ns: to ns_
+        $nsm = array_keys($nss);
+        foreach ($nsm as $key)
         {
-            return array();
+            $rgx
+                = '#'
+                . '('
+                . '\<'
+                . '/?'
+                . preg_quote($key)
+                . ')'
+                . '('
+                . ':{1}'
+                . ')'
+                . '#'
+            ;
+
+            $rep
+                = '$1'
+                . '_'
+            ;
+
+            $xml =  preg_replace($rgx, $rep, $xml);
         }
 
-        $parser = xml_parser_create('');
-        xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8");
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
-        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
-        xml_parse_into_struct($parser, trim($contents), $xml_values);
-        xml_parser_free($parser);
+        $xml = json_decode(json_encode(SimpleXML_Load_String($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 
-        if(!$xml_values)
-            return;
-
-        $xml_array = array();
-        $parents = array();
-        $opened_tags = array();
-        $arr = array();
-
-        $current = &$xml_array;
-
-        $repeated_tag_index = array();
-
-        foreach($xml_values as $data)
-        {
-            unset($attributes,$value);
-
-            extract($data);
-
-            $result = array();
-
-            $attributes_data = array();
-
-            if(isset($value))
-            {
-                if($priority == 'tag')
-                    $result = $value;
-                else
-                    $result['value'] = $value;
-            }
-
-            if(isset($attributes) and $get_attributes)
-            {
-                foreach($attributes as $attr => $val)
-                {
-                    if($priority == 'tag')
-                        $attributes_data[$attr] = $val;
-                    else
-                        $result['attr'][$attr] = $val;
-                }
-            }
-
+        if (self::$cleanResult){
+            $result = $xml['env_Body'];
+        }else{
+            $result = $xml;
         }
 
-        return($xml_array);
+        return $result;
+
     }
+    /* END::Tools */
 
 }
 ?>
