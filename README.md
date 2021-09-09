@@ -1,5 +1,5 @@
 <!-- MARKDOWN LINKS & IMAGES -->
-[project-logo-url]: https://www.isgkitapdunyasi.com/dist/img/icons/yurtici-icon.svg
+[project-logo-url]: /img/yurtici-logo.svg
 [project-url]: https://github.com/beratkrdr/yurtici-kargo-entegrasyon-php
 
 [github-url]: https://github.com/beratkrdr/
@@ -26,7 +26,7 @@
 <p align="center">
   
   <a href="https://github.com/beratkrdr/yurtici-kargo-entegrasyon-php">
-    <img src="https://www.isgkitapdunyasi.com/dist/img/icons/yurtici-icon.svg" alt="Logo" width="80" height="80">
+    <img src="/img/yurtici-logo.svg" alt="Logo" width="80" height="80">
   </a>
   
   <h1 align="center">Yurtiçi Kargo - Php Entegrasyon Kütüphanesi</h1>
