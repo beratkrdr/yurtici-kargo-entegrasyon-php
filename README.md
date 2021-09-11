@@ -14,6 +14,7 @@
 
 
 <!-- PROJECT TOP -->
+[![Hits](https://shields-io-visitor-counter.herokuapp.com/badge?page=beratkrdr.yurtici-kargo-entegrasyon-php&color=1D70B8&label=hits&logo=GitHub&logoColor=FFFFFF&style=for-the-badge)][project-url]
 [![Contributors](https://img.shields.io/github/contributors/beratkrdr/yurtici-kargo-entegrasyon-php.svg?style=for-the-badge)][contributors-url]
 [![Forks](https://img.shields.io/github/forks/beratkrdr/yurtici-kargo-entegrasyon-php.svg?style=for-the-badge)][forks-url]
 [![Stargazers](https://img.shields.io/github/stars/beratkrdr/yurtici-kargo-entegrasyon-php.svg?style=for-the-badge)][stars-url]
