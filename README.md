@@ -12,9 +12,9 @@
 [issues-url]: https://github.com/beratkrdr/yurtici-kargo-entegrasyon-php/issues
 [license-url]: https://github.com/beratkrdr/yurtici-kargo-entegrasyon-php/blob/master/LICENSE.txt
 
-
 <!-- PROJECT TOP -->
-[![Hits](https://shields-io-visitor-counter.herokuapp.com/badge?page=beratkrdr.yurtici-kargo-entegrasyon-php&color=1D70B8&label=hits&logo=GitHub&logoColor=FFFFFF&style=for-the-badge)][project-url]
+[![Hits](https://shields-io-visitor-counter.herokuapp.com/badge?page=beratkrdr.yurtici-kargo-entegrasyon-php&color=017EC5&label=hits&logo=GitHub&logoColor=FFFFFF&style=for-the-badge)][project-url]
+[![Downloads](https://img.shields.io/github/downloads/beratkrdr/yurtici-kargo-entegrasyon-php/total?color=blue&style=for-the-badge)][project-url]
 [![Contributors](https://img.shields.io/github/contributors/beratkrdr/yurtici-kargo-entegrasyon-php.svg?style=for-the-badge)][contributors-url]
 [![Forks](https://img.shields.io/github/forks/beratkrdr/yurtici-kargo-entegrasyon-php.svg?style=for-the-badge)][forks-url]
 [![Stargazers](https://img.shields.io/github/stars/beratkrdr/yurtici-kargo-entegrasyon-php.svg?style=for-the-badge)][stars-url]
