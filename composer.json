@@ -1,23 +1,18 @@
 {
-  "name": "beratkrdr/yurtici-kargo-entegrasyon-php",
-  "type": "project",
-  "description": "Yurtiçi Kargo - Php Entegrasyon Kütüphanesi",
-  "keywords": ["php", "php-library", "kargo", "entegrasyon", "yurticikargo", "yurtici-kargo"],
-  "homepage": "https://github.com/beratkrdr/yurtici-kargo-entegrasyon-php",
-  "license": "GPL-3.0-only",
-  "authors": [
-    {
-      "name": "Berat Kırdar",
-      "email": "beratkrdr@hotmail.com"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/beratkrdr/yurtici-kargo-entegrasyon-php"
-    }
-  ],
-  "require": {
-    "php": ">=5.5.0"
-  }
+    "name": "beratkrdr/yurtici-kargo-entegrasyon-php",
+    "description": "Bu kütüphane sayesinde Yurtiçi Kargo ile entegre bir şekilde kargo oluşturabilir, kargo durumunu sorgulayabilir ve kargonuzu iptal edebilirsiniz.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Beratkrdr\\YurticiKargoEntegrasyonPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Berat Kırdar",
+            "email": "beratkrdr@hotmail.com"
+        }
+    ],
+    "require": {}
 }
