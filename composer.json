@@ -1,0 +1,17 @@
+{
+  "name": "beratkrdr/yurtici-kargo-entegrasyon-php",
+  "type": "project",
+  "description": "Yurtiçi Kargo - Php Entegrasyon Kütüphanesi",
+  "keywords": ["php", "php-library", "kargo", "entegrasyon", "yurticikargo", "yurtici-kargo"],
+  "homepage": "https://github.com/beratkrdr/yurtici-kargo-entegrasyon-php",
+  "license": "GPL-3.0-only",
+  "authors": [
+    {
+      "name": "Berat Kırdar",
+      "email": "beratkrdr@hotmail.com"
+    }
+  ],
+  "require": {
+    "beratkrdr/yurtici-kargo-entegrasyon-php": "~1.0"
+  }
+}
