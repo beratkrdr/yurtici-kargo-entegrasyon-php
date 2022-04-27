@@ -11,6 +11,12 @@
       "email": "beratkrdr@hotmail.com"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/beratkrdr/yurtici-kargo-entegrasyon-php"
+    }
+  ],
   "require": {
     "php": ">=5.5.0"
   }
