@@ -12,6 +12,6 @@
     }
   ],
   "require": {
-    "beratkrdr/yurtici-kargo-entegrasyon-php": "~1.0"
+    "php": ">=5.5.0"
   }
 }
