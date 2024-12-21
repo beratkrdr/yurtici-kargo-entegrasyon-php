@@ -1,22 +1,36 @@
 <?php
-Class yurticiKargo {
 
-    protected static $url, $oAuth, $cleanResult;
+//$products = $soapClient->getAvailableProducts(['customerProfile' => $cadooz_customer_profile]);
+
+Class YurticiKargo {
+
+    protected static $url, $oAuth, $cleanResult, $soapClient;
 
     public function __construct(array $attributes = array()) {
 
         if (isset($attributes['testMode']) && $attributes['testMode']==true){
-            self::$url = 'http://testwebservices.yurticikargo.com:9090/KOPSWebServices/ShippingOrderDispatcherServices?wsdl';
+            self::$url = 'https://testws.yurticikargo.com/KOPSWebServices/ShippingOrderDispatcherServices?wsdl';
 
-            self::$oAuth = '<wsUserName>YKTEST</wsUserName>
-                            <wsPassword>YK</wsPassword>
-                            <userLanguage>TR</userLanguage>';
+            self::$soapClient = new SoapClient(self::$url, [
+                'trace' => 1,
+                'exceptions' => true,
+                'cache_wsdl' => WSDL_CACHE_NONE,
+            ]);
+
+            self::$oAuth = [
+                'wsUserName'    => 'YKTEST',
+                'wsPassword'    => 'YK',
+                'userLanguage'  => 'TR'
+            ];
+
         }else{
-            self::$url = 'http://webservices.yurticikargo.com:8080/KOPSWebServices/ShippingOrderDispatcherServices?wsdl';
+            self::$url = 'https://ws.yurticikargo.com/KOPSWebServices/ShippingOrderDispatcherServices?wsdl';
 
-            self::$oAuth = '<wsUserName>'.$attributes['wsUserName'].'</wsUserName>
-                            <wsPassword>'.$attributes['wsPassword'].'</wsPassword>
-                            <userLanguage>'.$attributes['wsLanguage'].'</userLanguage>';
+            self::$oAuth = [
+                'wsUserName'    => $attributes['wsUserName'],
+                'wsPassword'    => $attributes['wsPassword'],
+                'userLanguage'  => $attributes['wsLanguage']
+            ];
         }
 
         if (isset($attributes['cleanResult'])){
